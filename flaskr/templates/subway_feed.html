@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>{{ line }} Line Feed</title>
+  </head>
+  <body>
+    <h1>{{ line }} Line Realtime Feed</h1>
+    <a href="/">Back to Homepage</a>
+    <table border="1">
+      <thead>
+        <tr>
+          <th>Trip ID</th>
+          <th>Start Time</th>
+          <th>Start Date</th>
+          <th>Stop Time Updates</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for trip in data %}
+        <tr>
+          <td>{{ trip.trip_id }}</td>
+          <td>{{ trip.start_time }}</td>
+          <td>{{ trip.start_date }}</td>
+          <td>
+            <ul>
+              {% for stop in trip.stop_time_updates %}
+              <li>
+                Stop ID: {{ stop.stop_id }}, Arrival Time: {{ stop.arrival_time
+                }}, Departure Time: {{ stop.departure_time }}
+              </li>
+              {% endfor %}
+            </ul>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </body>
+</html>

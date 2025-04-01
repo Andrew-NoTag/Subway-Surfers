@@ -1,6 +1,9 @@
 import os
-from flask import Flask, jsonify
+from flask import Flask, jsonify, render_template
 import requests
+import xml.etree.ElementTree as ET
+from google.transit import gtfs_realtime_pb2
+from datetime import datetime
 
 
 def create_app(test_config=None):
@@ -27,29 +30,7 @@ def create_app(test_config=None):
     # Homepage route
     @app.route('/')
     def homepage():
-        return '''
-        <!DOCTYPE html>
-        <html>
-        <head>
-            <title>Subway Surfers</title>
-        </head>
-        <body>
-            <h1>Welcome to Subway Surfers</h1>
-            <p>Click the links below to access the MTA Subway Realtime Feeds:</p>
-            <ul>
-                <!-- <li><a href="/mta/elevator">MTA Elevator Data</a></li> -->
-                <li><a href="/mta/feeds/ace">ACE Line</a></li>
-                <li><a href="/mta/feeds/bdfm">BDFM Line</a></li>
-                <li><a href="/mta/feeds/g">G Line</a></li>
-                <li><a href="/mta/feeds/jz">JZ Line</a></li>
-                <li><a href="/mta/feeds/nqrw">NQRW Line</a></li>
-                <li><a href="/mta/feeds/l">L Line</a></li>
-                <li><a href="/mta/feeds/1234567s">1234567S Line</a></li>
-                <li><a href="/mta/feeds/sir">SIR Line</a></li>
-            </ul>
-        </body>
-        </html>
-        '''
+        return render_template('homepage.html')
 
     # Routes for Subway Realtime Feeds
     @app.route('/mta/feeds/<line>')
@@ -69,7 +50,32 @@ def create_app(test_config=None):
             return jsonify({'error': 'Invalid line specified'}), 404
         try:
             response = requests.get(url)
-            return response.text
+            response.raise_for_status()
+
+            # Parse Protobuf data
+            feed = gtfs_realtime_pb2.FeedMessage()
+            feed.ParseFromString(response.content)
+
+            # Extract relevant data
+            data = []
+            for entity in feed.entity:
+                if entity.HasField('trip_update'):
+                    trip_update = entity.trip_update
+                    data.append({
+                        'trip_id': trip_update.trip.trip_id,
+                        'start_time': trip_update.trip.start_time,
+                        'start_date': trip_update.trip.start_date,
+                        'stop_time_updates': [
+                            {
+                                'stop_id': stop_time_update.stop_id,
+                                'arrival_time': datetime.utcfromtimestamp(stop_time_update.arrival.time).strftime('%Y-%m-%d %H:%M:%S') if stop_time_update.HasField('arrival') else None,
+                                'departure_time': datetime.utcfromtimestamp(stop_time_update.departure.time).strftime('%Y-%m-%d %H:%M:%S') if stop_time_update.HasField('departure') else None
+                            }
+                            for stop_time_update in trip_update.stop_time_update
+                        ]
+                    })
+
+            return render_template('subway_feed.html', line=line.upper(), data=data)
         except Exception as e:
             return jsonify({'error': str(e)}), 500
 
