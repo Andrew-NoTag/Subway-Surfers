@@ -1,4 +1,5 @@
 # Subway-Surfers
+
 NYU Tandon Spring 2025 LeetCode Bootcamp Project
 
 **Team Name**: Subway Surfers
@@ -18,8 +19,8 @@ NYU Tandon Spring 2025 LeetCode Bootcamp Project
 - Multilingual Support: Offer the application in multiple languages.
 - User Accounts: Basic account creation and user authentication using [Firebase](https://firebase.google.com/docs/auth/web/start).
 
-
 To run the program:
 
-Clone the repository and run `python flaskr\wsgi.py`
+Clone the repository and run `python flaskr/wsgi.py`
+To start frontend run `npm start`
 To see the main page, go to `http://127.0.0.1:5000/`
