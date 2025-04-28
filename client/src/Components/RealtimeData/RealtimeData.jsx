@@ -20,8 +20,10 @@ function RealtimeData() {
   const [error, setError] = useState('');
   const [trips, setTrips] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [currentLine, setCurrentLine] = useState('bdfm');
+  const [currentLines, setcurrentLines] = useState('bdfm');
   const [timeUpdated, setTimeUpdated] = useState('');
+  const [currentLinesArray, setcurrentLinesArray] = useState(["B", "D", "F", "M"]);
+  const [currentLine, setcurrentLine] = useState('');
 
   // Define available subway lines
   const subwayLines = [
@@ -35,7 +37,7 @@ function RealtimeData() {
     { id: 'sir', label: 'Staten Island Railway' }
   ];
 
-  const fetchData = (line = currentLine) => {
+  const fetchData = (line = currentLines) => {
     setLoading(true);
     setError('');
     
@@ -60,13 +62,28 @@ function RealtimeData() {
     
     // Clean up interval on component unmount
     return () => clearInterval(intervalId);
-  }, [currentLine]);
+  }, [currentLines]);
 
   const handleLineChange = (line) => {
-    setCurrentLine(line);
+    setcurrentLines(line);
     setTrips([]);
     fetchData(line);
+    let lines = [];
+    if (line == "bdfm") lines = ["B", "D", "F", "M"];
+    if (line == "ace") lines = ["A", "C", "E"];
+    if (line == "g") lines = ["G"];
+    if (line == "jz") lines = ["J", "Z"];
+    if (line == "l") lines = ["L"];
+    if (line == "nqrw") lines = ["N", "Q", "R", "W"];
+    if (line == "1234567s") lines = ["1", "2", "3", "4", "5", "6", "7"];
+    if (line == "sir") lines = ['Staten Island Railway'];
+    setcurrentLinesArray(lines);
+    setcurrentLine('');
   };
+
+  const handleLineChange2 = (line) => {
+    setcurrentLine(line);
+  }
 
   // const getStationName = (stopId) => {
   //   // This function would ideally map station IDs to readable names
@@ -120,7 +137,7 @@ function RealtimeData() {
           {subwayLines.map(line => (
             <button
               key={line.id}
-              className={`line-button ${currentLine === line.id ? 'active' : ''}`}
+              className={`line-button ${currentLines === line.id ? 'active' : ''}`}
               onClick={() => handleLineChange(line.id)}
             >
               {line.label}
@@ -128,9 +145,27 @@ function RealtimeData() {
           ))}
         </div>
       </div>
+
+      <div className="line-selector">
+        {/* <h3>Select a subway line:</h3> */}
+        <div className="line-buttons">
+          {currentLinesArray.map(line => (
+            <button
+              key={line}
+              className={`line-button ${currentLine === line ? 'active' : ''}`}
+              onClick={() => handleLineChange2(line)}
+            >
+              {line}
+            </button>
+          ))}
+        </div>
+      </div>
       
       <div className="updates-header">
-        <h3>Showing trips for line: {subwayLines.find(l => l.id === currentLine)?.label}</h3>
+        <h3>
+          Showing trips for line: {currentLine == "" && subwayLines.find(l => l.id === currentLines)?.label} 
+          {currentLine != "" && currentLine}
+        </h3>
         {timeUpdated && <p className="last-updated">Last updated: {timeUpdated}</p>}
         <button className="refresh-button" onClick={() => fetchData()} disabled={loading}>
           {loading ? 'Refreshing...' : 'Refresh Data'}
@@ -149,6 +184,7 @@ function RealtimeData() {
               <h3>Northbound</h3>
               {trips
                 .filter(trip => getTripDirection(trip.trip_id) == "Northbound")
+                .filter(trip => currentLine == "" || getTripLine(trip.trip_id) == currentLine)
                 .slice(0, 10) // Limit to first 10 trips
                 .map(trip => (
                   <div key={trip.trip_id} className="trip-card">
@@ -186,6 +222,7 @@ function RealtimeData() {
               <h3>Southbound</h3>
               {trips
                 .filter(trip => getTripDirection(trip.trip_id) == "Southbound")
+                .filter(trip => currentLine == "" || getTripLine(trip.trip_id) == currentLine)
                 .slice(0, 10)
                 .map(trip => (
                   <div key={trip.trip_id} className="trip-card">
