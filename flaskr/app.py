@@ -68,8 +68,8 @@ def create_app(test_config=None):
                         'stop_time_updates': [
                             {
                                 'stop_id': stop_time_update.stop_id,
-                                'arrival_time': datetime.utcfromtimestamp(stop_time_update.arrival.time).strftime('%Y-%m-%d %H:%M:%S') if stop_time_update.HasField('arrival') else None,
-                                'departure_time': datetime.utcfromtimestamp(stop_time_update.departure.time).strftime('%Y-%m-%d %H:%M:%S') if stop_time_update.HasField('departure') else None
+                                'arrival_time': datetime.fromtimestamp(stop_time_update.arrival.time).strftime('%Y-%m-%d %H:%M:%S') if stop_time_update.HasField('arrival') else None,
+                                'departure_time': datetime.fromtimestamp(stop_time_update.departure.time).strftime('%Y-%m-%d %H:%M:%S') if stop_time_update.HasField('departure') else None
                             }
                             for stop_time_update in trip_update.stop_time_update
                         ]
@@ -115,8 +115,8 @@ def create_app(test_config=None):
                         'stop_time_updates': [
                             {
                                 'stop_id': stop_time_update.stop_id,
-                                'arrival_time': datetime.utcfromtimestamp(stop_time_update.arrival.time).strftime('%Y-%m-%d %H:%M:%S') if stop_time_update.HasField('arrival') else None,
-                                'departure_time': datetime.utcfromtimestamp(stop_time_update.departure.time).strftime('%Y-%m-%d %H:%M:%S') if stop_time_update.HasField('departure') else None
+                                'arrival_time': datetime.fromtimestamp(stop_time_update.arrival.time).strftime('%Y-%m-%d %H:%M:%S') if stop_time_update.HasField('arrival') else None,
+                                'departure_time': datetime.fromtimestamp(stop_time_update.departure.time).strftime('%Y-%m-%d %H:%M:%S') if stop_time_update.HasField('departure') else None
                             }
                             for stop_time_update in trip_update.stop_time_update
                         ]

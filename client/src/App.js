@@ -6,7 +6,7 @@ import {
 } from 'react-router-dom';
 import './App.css';
 
-import Navbar from './Components/Navbar';
+// import Navbar from './Components/Navbar';
 import RealtimeData from './Components/RealtimeData';
 
 function App() {

@@ -1,75 +1,3 @@
-// import React, { useState, useEffect  } from 'react'
-// import propTypes from 'prop-types';
-// import axios from 'axios';
-
-// function ErrorMessage({ message }) {
-//   return (
-//     <div className="error-message">
-//       {message}
-//     </div>
-//   );
-// }
-
-// ErrorMessage.propTypes = {
-//   message: propTypes.string.isRequired,
-// };
-
-// function RealtimeData() {
-//   const [error, setError] = useState('');
-//   const [trips, setTrips] = useState([])
-
-//   const fetchData = () => {
-//     axios.get("/bdfm")
-//       .then(({ data }) => {
-//         setTrips(data)
-//       })
-//       .catch(err => setError(`There was a problem retrieving the about text. ${err}`));
-//   };
-
-//   useEffect(fetchData, []);
-
-//   // useEffect(() => {
-//   //   fetch("/bdfm").then(
-//   //     res => res.json()
-//   //   ).then(
-//   //     data => {
-//   //       setTrips(data)
-//   //       console.log(data)
-//   //     }
-//   //   )
-//   // }, [])
-
-//   return (
-//     <div>
-//       {error && <ErrorMessage message={error} />}
-//       {trips.map((trip, i) => (
-//         <div key={trip.trip_id} style={{ border: '1px solid #ccc', margin: 10, padding: 10 }}>
-//           <h3>Trip ID: {trip.trip_id}</h3>
-//           <p>
-//             Start Date: {trip.start_date} <br />
-//             Start Time: {trip.start_time}
-//           </p>
-//           <h4>Stop Updates:</h4>
-//           <ul>
-//             {trip.stop_time_updates.map((stop, j) => (
-//               <li key={stop.stop_id + j}>
-//                 <strong>{stop.stop_id}</strong>
-//                 <br />
-//                 Arrival: {stop.arrival_time}
-//                 <br />
-//                 Departure: {stop.departure_time}
-//               </li>
-//             ))}
-//           </ul>
-//         </div>
-//       ))}
-
-//       {trips.length === 0 && <p>Loading trips…</p>}
-//     </div>
-//   )
-// }
-
-// export default RealtimeData
 import React, { useState, useEffect } from 'react';
 import propTypes from 'prop-types';
 import axios from 'axios';
@@ -149,12 +77,24 @@ function RealtimeData() {
     return stationMapping[stopId] || stopId;
   }
 
-  // Function to determine if a trip is northbound or southbound
   const getTripDirection = (tripId) => {
-    if (tripId.endsWith('N')) return 'Northbound';
-    if (tripId.endsWith('S')) return 'Southbound';
+    let dotIndex = tripId.indexOf(".");
+    if (tripId[dotIndex + 2] == 'N') return 'Northbound';
+    if (tripId[dotIndex + 2] == 'S') return 'Southbound';
     return 'Unknown direction';
-  };
+  }
+
+  const getTripLine = (tripId) => {
+    let dotIndex = tripId.indexOf(".");
+    return tripId[dotIndex - 1];
+  }
+
+  // Function to determine if a trip is northbound or southbound
+  // const getTripDirection = (tripId) => {
+  //   if (tripId.endsWith('N')) return 'Northbound';
+  //   if (tripId.endsWith('S')) return 'Southbound';
+  //   return 'Unknown direction';
+  // };
 
   // Calculate time until arrival
   const getTimeUntil = (timeString) => {
@@ -208,13 +148,13 @@ function RealtimeData() {
             <div className="direction-column">
               <h3>Northbound</h3>
               {trips
-                .filter(trip => trip.trip_id.endsWith('N'))
+                .filter(trip => getTripDirection(trip.trip_id) == "Northbound")
                 .slice(0, 10) // Limit to first 10 trips
                 .map(trip => (
                   <div key={trip.trip_id} className="trip-card">
                     <div className="trip-header">
-                      <h4>{getTripDirection(trip.trip_id)}</h4>
-                      <span className="route-id">{trip.route_id || currentLine.toUpperCase()}</span>
+                      {/* <h4>{getTripLine(trip.trip_id)}</h4> */}
+                      <span className="route-id">{getTripLine(trip.trip_id)}</span>
                     </div>
                     <table className="stops-table">
                       <thead>
@@ -236,7 +176,7 @@ function RealtimeData() {
                     </table>
                   </div>
                 ))}
-              {trips.filter(trip => trip.trip_id.endsWith('N')).length === 0 && 
+              {trips.filter(trip => getTripDirection(trip.trip_id) == "Northbound").length === 0 && 
                 <p className="no-trips">No northbound trips available</p>
               }
             </div>
@@ -245,13 +185,13 @@ function RealtimeData() {
             <div className="direction-column">
               <h3>Southbound</h3>
               {trips
-                .filter(trip => trip.trip_id.endsWith('S'))
+                .filter(trip => getTripDirection(trip.trip_id) == "Southbound")
                 .slice(0, 10)
                 .map(trip => (
                   <div key={trip.trip_id} className="trip-card">
                     <div className="trip-header">
-                      <h4>{getTripDirection(trip.trip_id)}</h4>
-                      <span className="route-id">{trip.route_id || currentLine.toUpperCase()}</span>
+                      {/* <h4>{getTripDirection(trip.trip_id)}</h4> */}
+                      <span className="route-id">{getTripLine(trip.trip_id)}</span>
                     </div>
                     <table className="stops-table">
                       <thead>
@@ -273,7 +213,7 @@ function RealtimeData() {
                     </table>
                   </div>
                 ))}
-              {trips.filter(trip => trip.trip_id.endsWith('S')).length === 0 && 
+              {trips.filter(trip => getTripDirection(trip.trip_id) == "Northbound").length === 0 && 
                 <p className="no-trips">No southbound trips available</p>
               }
             </div>
