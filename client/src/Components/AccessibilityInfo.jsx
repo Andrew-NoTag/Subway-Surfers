@@ -44,7 +44,7 @@ const AccessibilityInfo = ({ stationId }) => {
             <h2 className="text-xl font-bold mb-4">Station Accessibility Information</h2>
             
             <div className="mb-2 p-2 bg-gray-100 rounded">
-                <p><strong>Debug Info:</strong></p>
+                <p><strong>Summary:</strong></p>
                 <p>Total Elevators: {accessibilityData.elevators.length}</p>
                 <p>Working Elevators: {workingElevators.length}</p>
                 <p>Out of Service Elevators: {outOfServiceElevators.length}</p>
