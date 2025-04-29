@@ -1,0 +1,124 @@
+.accessibility-info {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+    font-family: Arial, sans-serif;
+}
+
+.accessibility-info h2 {
+    color: #0039a6; /* MTA Blue */
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.accessibility-info .error {
+    background-color: #ffebee;
+    border-left: 4px solid #f44336;
+    color: #b71c1c;
+    padding: 12px;
+    margin-bottom: 16px;
+    border-radius: 4px;
+}
+
+.accessibility-info .loading {
+    text-align: center;
+    padding: 20px;
+    color: #666;
+    font-style: italic;
+}
+
+.accessibility-info .section {
+    margin-bottom: 24px;
+}
+
+.accessibility-info .section h3 {
+    margin-bottom: 12px;
+    font-size: 18px;
+    color: #333;
+    border-bottom: 2px solid #0039a6;
+    padding-bottom: 5px;
+}
+
+.accessibility-info ul {
+    list-style: none;
+    padding: 0;
+}
+
+.accessibility-info li {
+    background-color: white;
+    border-radius: 6px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    margin-bottom: 10px;
+    padding: 12px;
+}
+
+.accessibility-info li p {
+    margin: 5px 0;
+}
+
+.accessibility-info .text-green-600 {
+    color: #4caf50;
+}
+
+.accessibility-info .text-red-600 {
+    color: #f44336;
+}
+
+.accessibility-info .text-yellow-600 {
+    color: #ff9800;
+}
+
+.accessibility-info .bg-green-50 {
+    background-color: #e8f5e9;
+}
+
+.accessibility-info .bg-red-50 {
+    background-color: #ffebee;
+}
+
+.accessibility-info .bg-yellow-50 {
+    background-color: #fffde7;
+}
+
+.accessibility-info .border-green-300 {
+    border: 1px solid #81c784;
+}
+
+.accessibility-info .border-red-300 {
+    border: 1px solid #e57373;
+}
+
+.accessibility-info .border-yellow-300 {
+    border: 1px solid #ffd54f;
+}
+
+.accessibility-info .back-button {
+    display: inline-block;
+    background-color: #0039a6;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 4px;
+    text-decoration: none;
+    font-weight: bold;
+    text-align: center;
+    transition: background-color 0.2s;
+}
+
+.accessibility-info .back-button:hover {
+    background-color: #002d7a;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .accessibility-info {
+        padding: 15px;
+    }
+
+    .accessibility-info h2 {
+        font-size: 20px;
+    }
+
+    .accessibility-info .section h3 {
+        font-size: 16px;
+    }
+}

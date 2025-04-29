@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-
+import './AccessibilityInfo.css'; 
 const AccessibilityInfo = ({ stationId }) => {
     const [accessibilityData, setAccessibilityData] = useState(null);
     const [loading, setLoading] = useState(true);
