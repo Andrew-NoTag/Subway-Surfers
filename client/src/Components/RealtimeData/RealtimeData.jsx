@@ -3,6 +3,7 @@ import propTypes from 'prop-types';
 import axios from 'axios';
 import { stationMapping } from './StationMapping'; 
 import './RealtimeData.css'; 
+import { Link } from 'react-router-dom';
 
 function ErrorMessage({ message }) {
   return (
@@ -203,7 +204,11 @@ function RealtimeData() {
                       <tbody>
                         {trip.stop_time_updates.slice(0, 8).map((stop, j) => (
                           <tr key={stop.stop_id + j}>
-                            <td>{getStationName(stop.stop_id)}</td>
+                            <td>
+                              <Link to={`/station/${encodeURIComponent(getStationName(stop.stop_id))}`}>
+                                {getStationName(stop.stop_id)}
+                              </Link>
+                            </td>
                             <td>{stop.arrival_time ? new Date(stop.arrival_time).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : 'N/A'}</td>
                             <td className="eta">{getTimeUntil(stop.arrival_time)}</td>
                           </tr>
@@ -241,7 +246,11 @@ function RealtimeData() {
                       <tbody>
                         {trip.stop_time_updates.slice(0, 8).map((stop, j) => (
                           <tr key={stop.stop_id + j}>
-                            <td>{getStationName(stop.stop_id)}</td>
+                            <td>
+                              <Link to={`/station/${encodeURIComponent(getStationName(stop.stop_id))}`}>
+                                {getStationName(stop.stop_id)}
+                              </Link>
+                            </td>
                             <td>{stop.arrival_time ? new Date(stop.arrival_time).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : 'N/A'}</td>
                             <td className="eta">{getTimeUntil(stop.arrival_time)}</td>
                           </tr>
